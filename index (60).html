@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Frais de Représentation - Comprendre le Forfait</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1729;
+  --bg2: #162038;
+  --card: #1c2a4a;
+  --accent: #38bdf8;
+  --accent2: #818cf8;
+  --accent3: #34d399;
+  --warm: #fb923c;
+  --pink: #f472b6;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --gold: #fbbf24;
+  --red: #f87171;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ─── GLOBAL ANIMATIONS ─── */
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideLeft { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes glow { 0%,100% { box-shadow: 0 0 20px rgba(56,189,248,0.3); } 50% { box-shadow: 0 0 40px rgba(56,189,248,0.6); } }
+@keyframes drive { 0% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+@keyframes flyIn { 0% { transform: translateX(200%) translateY(-60px) rotate(-5deg); opacity:0; } 100% { transform: translateX(0) translateY(0) rotate(0deg); opacity:1; } }
+@keyframes moneyFloat { 0% { transform: translateY(0) rotate(0deg); opacity:1; } 100% { transform: translateY(-80px) rotate(15deg); opacity:0; } }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 40% { transform: translateY(-12px); } }
+@keyframes confetti { 0% { transform: translateY(0) rotate(0deg); opacity:1; } 100% { transform: translateY(120px) rotate(360deg); opacity:0; } }
+@keyframes walkRight { 0% { transform: translateX(0); } 100% { transform: translateX(100%); } }
+@keyframes scaleIn { from { transform: scale(0); opacity:0; } to { transform: scale(1); opacity:1; } }
+@keyframes shake { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+
+/* ─── PROGRESS BAR ─── */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  z-index: 1000; transition: width 0.6s ease;
+}
+
+/* ─── NAVIGATION ─── */
+#step-nav {
+  position: fixed; top: 20px; right: 20px; z-index: 999;
+  display: flex; gap: 8px; align-items: center;
+}
+.step-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--bg2); border: 2px solid var(--text-dim);
+  cursor: pointer; transition: all 0.3s;
+  position: relative;
+}
+.step-dot.active { background: var(--accent); border-color: var(--accent); transform: scale(1.3); }
+.step-dot.done { background: var(--accent3); border-color: var(--accent3); }
+.step-dot:hover { transform: scale(1.2); }
+.step-dot .tooltip {
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  background: var(--card); padding: 4px 10px; border-radius: 6px;
+  font-size: 0.7rem; white-space: nowrap; opacity: 0;
+  pointer-events: none; transition: opacity 0.2s;
+}
+.step-dot:hover .tooltip { opacity: 1; }
+
+/* ─── SCREENS ─── */
+.screen {
+  display: none; min-height: 100vh;
+  padding: 40px 20px;
+  flex-direction: column; align-items: center; justify-content: center;
+}
+.screen.active { display: flex; animation: fadeIn 0.5s ease; }
+
+/* ─── HERO SCREEN ─── */
+#screen-intro {
+  background: radial-gradient(ellipse at 30% 20%, rgba(56,189,248,0.15), transparent 60%),
+              radial-gradient(ellipse at 70% 80%, rgba(129,140,248,0.1), transparent 50%),
+              var(--bg);
+  text-align: center;
+}
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 16px; line-height: 1.2;
+}
+.hero-subtitle {
+  font-family: 'Caveat', cursive; font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: var(--gold); margin-bottom: 30px;
+}
+.hero-desc {
+  max-width: 600px; color: var(--text-dim); font-size: 1.05rem;
+  line-height: 1.7; margin-bottom: 40px;
+}
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 32px; border-radius: 14px; border: none;
+  font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 600;
+  cursor: pointer; transition: all 0.3s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; box-shadow: 0 4px 20px rgba(56,189,248,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(56,189,248,0.4); }
+.btn-secondary {
+  background: var(--card); color: var(--text); border: 1px solid rgba(255,255,255,0.1);
+}
+.btn-secondary:hover { background: var(--bg2); }
+.btn-success {
+  background: linear-gradient(135deg, var(--accent3), #059669);
+  color: #fff;
+}
+.btn-warm {
+  background: linear-gradient(135deg, var(--warm), #ea580c);
+  color: #fff;
+}
+.nav-buttons {
+  display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; justify-content: center;
+}
+
+/* ─── SCENE / ANIMATION AREA ─── */
+.scene-container {
+  width: 100%; max-width: 800px;
+  background: var(--bg2);
+  border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden; margin: 20px auto;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+.scene-header {
+  padding: 16px 24px;
+  background: linear-gradient(135deg, rgba(56,189,248,0.1), rgba(129,140,248,0.1));
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-weight: 600; font-size: 1.1rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.scene-body {
+  padding: 24px; position: relative;
+  min-height: 320px;
+}
+
+/* ─── STAGE (animation playground) ─── */
+.stage {
+  width: 100%; height: 260px;
+  position: relative; overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #1e3a5f 0%, #1a2744 50%, #2d4a3e 85%, #3a6b4e 100%);
+  margin-bottom: 20px;
+}
+.stage-road {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 50px;
+  background: #374151; border-top: 3px solid #fbbf24;
+}
+.stage-road::after {
+  content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px;
+  background: repeating-linear-gradient(90deg, #fff 0, #fff 30px, transparent 30px, transparent 60px);
+  opacity: 0.5;
+}
+
+/* ─── EMOJI CHARACTERS ─── */
+.char {
+  position: absolute; font-size: 2.5rem;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 5;
+}
+.char-label {
+  position: absolute; font-size: 0.65rem; font-weight: 600;
+  background: rgba(0,0,0,0.7); color: #fff; padding: 2px 8px;
+  border-radius: 10px; white-space: nowrap;
+  left: 50%; transform: translateX(-50%); bottom: -18px;
+}
+.building {
+  position: absolute; bottom: 50px; font-size: 3rem; z-index: 3;
+}
+.building-label {
+  position: absolute; font-size: 0.6rem; font-weight: 600;
+  background: rgba(0,0,0,0.7); color: #fff; padding: 2px 8px;
+  border-radius: 10px; white-space: nowrap;
+  left: 50%; transform: translateX(-50%); top: -16px;
+}
+
+/* Money animation */
+.money-anim {
+  position: absolute; font-size: 1.5rem; z-index: 10;
+  animation: moneyFloat 1.5s ease forwards;
+  pointer-events: none;
+}
+
+/* ─── EXPLANATION CARDS ─── */
+.explain-card {
+  background: var(--card);
+  border-radius: 14px; padding: 20px 24px;
+  border-left: 4px solid var(--accent);
+  margin: 12px 0;
+  animation: slideUp 0.5s ease;
+  line-height: 1.7; font-size: 0.95rem;
+}
+.explain-card.green { border-left-color: var(--accent3); }
+.explain-card.orange { border-left-color: var(--warm); }
+.explain-card.pink { border-left-color: var(--pink); }
+
+.explain-card h3 {
+  font-size: 1.1rem; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ─── INTERACTIVE ELEMENTS ─── */
+.drag-zone {
+  border: 2px dashed rgba(255,255,255,0.2);
+  border-radius: 14px; padding: 20px;
+  min-height: 80px; text-align: center;
+  transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 10px;
+}
+.drag-zone.over { border-color: var(--accent); background: rgba(56,189,248,0.08); }
+.drag-zone.correct { border-color: var(--accent3); background: rgba(52,211,153,0.08); }
+
+.drag-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 10px;
+  background: var(--bg2); border: 1px solid rgba(255,255,255,0.1);
+  cursor: grab; user-select: none; font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.drag-item:hover { background: var(--card); transform: scale(1.05); }
+.drag-item.placed { opacity: 0.4; pointer-events: none; }
+
+/* ─── COMPARISON TABLE ─── */
+.compare-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; width: 100%; max-width: 700px; margin: 20px auto;
+}
+.compare-col {
+  background: var(--card); border-radius: 14px; padding: 20px;
+  border: 2px solid transparent; transition: all 0.3s;
+}
+.compare-col.highlight { border-color: var(--accent3); }
+.compare-col h3 {
+  font-size: 1rem; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.compare-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.85rem;
+}
+.compare-row:last-child { border: none; }
+.compare-row .label { color: var(--text-dim); }
+.compare-row .value { font-weight: 600; }
+.compare-row .value.positive { color: var(--accent3); }
+.compare-row .value.negative { color: var(--red); }
+
+/* ─── SLIDER ─── */
+.slider-container {
+  width: 100%; max-width: 600px; margin: 20px auto;
+  text-align: center;
+}
+.slider-container input[type=range] {
+  width: 100%; height: 8px; -webkit-appearance: none;
+  background: linear-gradient(90deg, var(--accent3), var(--warm), var(--red));
+  border-radius: 4px; outline: none; margin: 16px 0;
+}
+.slider-container input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 24px; height: 24px;
+  border-radius: 50%; background: #fff; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.slider-value {
+  font-size: 2rem; font-weight: 700; color: var(--gold);
+  font-family: 'Caveat', cursive;
+}
+
+/* ─── SALARY BARS ─── */
+.salary-bar-container {
+  display: flex; align-items: flex-end; gap: 24px;
+  justify-content: center; margin: 20px 0; height: 220px;
+}
+.salary-bar-wrapper { text-align: center; }
+.salary-bar {
+  width: 80px; border-radius: 10px 10px 0 0;
+  transition: height 1s ease; position: relative;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  overflow: hidden;
+}
+.salary-bar .segment {
+  width: 100%; transition: height 1s ease;
+}
+.salary-bar-label {
+  font-size: 0.75rem; margin-top: 8px; color: var(--text-dim);
+  max-width: 100px;
+}
+.salary-bar-value {
+  font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;
+}
+
+/* ─── RECEIPT ─── */
+.receipt {
+  background: #fef9ef; color: #1a1a1a; border-radius: 4px;
+  padding: 20px; max-width: 280px; margin: 0 auto;
+  font-family: 'Courier New', monospace; font-size: 0.8rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transform: rotate(-1deg);
+}
+.receipt h4 { text-align: center; font-size: 1rem; margin-bottom: 8px; border-bottom: 1px dashed #999; padding-bottom: 8px; }
+.receipt-line { display: flex; justify-content: space-between; padding: 3px 0; }
+.receipt-total { border-top: 2px solid #333; margin-top: 8px; padding-top: 8px; font-weight: 700; }
+
+/* ─── STEP INDICATOR ─── */
+.step-indicator {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.8rem; color: var(--text-dim);
+  margin-bottom: 20px;
+}
+.step-indicator .current { color: var(--accent); font-weight: 600; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 640px) {
+  .compare-grid { grid-template-columns: 1fr; }
+  .scene-body { padding: 16px; }
+  .stage { height: 200px; }
+  .char { font-size: 2rem; }
+  .building { font-size: 2.2rem; }
+  .salary-bar-container { gap: 12px; }
+  .salary-bar { width: 60px; }
+}
+
+/* ─── THOUGHT BUBBLE ─── */
+.thought-bubble {
+  position: absolute; background: rgba(255,255,255,0.95); color: #1a1a1a;
+  padding: 8px 14px; border-radius: 16px; font-size: 0.75rem;
+  font-weight: 500; z-index: 20;
+  animation: scaleIn 0.4s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+.thought-bubble::after {
+  content: ''; position: absolute; bottom: -8px; left: 20px;
+  width: 10px; height: 10px; background: rgba(255,255,255,0.95);
+  border-radius: 50%;
+}
+
+/* ─── TICKER ─── */
+.ticker {
+  background: linear-gradient(135deg, rgba(52,211,153,0.15), rgba(56,189,248,0.15));
+  border: 1px solid rgba(52,211,153,0.3);
+  border-radius: 12px; padding: 12px 20px;
+  font-size: 1.1rem; font-weight: 600;
+  text-align: center; margin: 12px 0;
+  animation: pulse 2s ease infinite;
+}
+
+/* ─── FORFAIT PROFILES ─── */
+.profile-cards {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  margin: 16px 0;
+}
+.profile-card {
+  background: var(--card); border-radius: 14px; padding: 16px;
+  text-align: center; width: 150px; cursor: pointer;
+  border: 2px solid transparent; transition: all 0.3s;
+}
+.profile-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+.profile-card.selected { border-color: var(--accent); background: rgba(56,189,248,0.08); }
+.profile-card .emoji { font-size: 2.5rem; margin-bottom: 8px; }
+.profile-card .name { font-weight: 600; font-size: 0.9rem; }
+.profile-card .role { color: var(--text-dim); font-size: 0.75rem; margin-top: 4px; }
+.profile-card .amount { color: var(--gold); font-weight: 700; margin-top: 8px; }
+
+/* Checkmark */
+.checkmark { color: var(--accent3); font-weight: 700; }
+
+/* Hidden helper */
+.hidden { display: none !important; }
+
+/* Screen titles */
+.screen-title {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700; text-align: center;
+  margin-bottom: 8px;
+}
+.screen-subtitle {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--gold); text-align: center;
+  margin-bottom: 24px;
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar" style="width: 0%"></div>
+
+<nav id="step-nav">
+  <div class="step-dot active" data-step="0"><span class="tooltip">Accueil</span></div>
+  <div class="step-dot" data-step="1"><span class="tooltip">Comprendre</span></div>
+  <div class="step-dot" data-step="2"><span class="tooltip">Le Scénario</span></div>
+  <div class="step-dot" data-step="3"><span class="tooltip">Le Forfait</span></div>
+  <div class="step-dot" data-step="4"><span class="tooltip">Forfait en action</span></div>
+  <div class="step-dot" data-step="5"><span class="tooltip">Comparer</span></div>
+  <div class="step-dot" data-step="6"><span class="tooltip">Salaire net</span></div>
+  <div class="step-dot" data-step="7"><span class="tooltip">Conclusion</span></div>
+</nav>
+
+<!-- ═══════════════════ SCREEN 0 : INTRO ═══════════════════ -->
+<section id="screen-intro" class="screen active" data-index="0">
+  <div style="font-size: 4rem; margin-bottom: 16px; animation: float 3s ease infinite;">💼</div>
+  <h1 class="hero-title">Les Frais de Représentation</h1>
+  <p class="hero-subtitle">Comprendre le remboursement forfaitaire en Belgique</p>
+  <p class="hero-desc">
+    Savais-tu que certaines dépenses professionnelles peuvent être remboursées de manière forfaitaire par l'employeur ?
+    Découvrons ensemble, étape par étape, comment fonctionnent les frais de représentation et pourquoi c'est avantageux.
+  </p>
+  <button class="btn btn-primary" onclick="goToStep(1)">
+    Commencer l'aventure 🚀
+  </button>
+</section>
+
+<!-- ═══════════════════ SCREEN 1 : DEFINITION ═══════════════════ -->
+<section class="screen" data-index="1">
+  <div class="step-indicator"><span class="current">Étape 1</span> / 7 — Qu'est-ce que c'est ?</div>
+  <h2 class="screen-title">🤔 C'est quoi, les frais de représentation ?</h2>
+  <p class="screen-subtitle">Quand le travailleur dépense pour son entreprise...</p>
+
+  <div class="scene-container">
+    <div class="scene-header">📖 Glisse les éléments pour reconstituer la définition</div>
+    <div class="scene-body">
+      <p style="margin-bottom:16px; color: var(--text-dim); font-size:0.9rem;">
+        Les frais de représentation, ce sont des dépenses engagées par un <strong>travailleur</strong> dans le cadre de sa mission professionnelle,
+        que son <strong>employeur</strong> va lui rembourser. Reconstitue la phrase correcte :
+      </p>
+
+      <div style="margin-bottom: 16px;">
+        <div class="drag-zone" id="drop-sentence" style="min-height: 60px; font-size: 0.95rem; justify-content: flex-start; padding: 12px;">
+          <span style="color: var(--text-dim);">👆 Dépose les éléments ici dans le bon ordre...</span>
+        </div>
+      </div>
+
+      <div id="drag-items" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+        <div class="drag-item" draggable="true" data-order="1">💼 Le travailleur</div>
+        <div class="drag-item" draggable="true" data-order="4">💰 L'employeur rembourse</div>
+        <div class="drag-item" draggable="true" data-order="2">🍽️ dépense pour un client</div>
+        <div class="drag-item" draggable="true" data-order="3">🧾 présente ses justificatifs</div>
+      </div>
+
+      <div id="def-result" class="explain-card green hidden" style="margin-top: 16px;">
+        <h3>✅ Parfait !</h3>
+        <p>Le travailleur avance de l'argent pour l'entreprise (repas, déplacements, cadeaux clients...), puis présente ses justificatifs et l'employeur lui rembourse les frais engagés. C'est le principe de base !</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" onclick="goToStep(0)">← Retour</button>
+    <button class="btn btn-primary" onclick="goToStep(2)">Voir un exemple concret →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════ SCREEN 2 : SCENARIO ANIME ═══════════════════ -->
+<section class="screen" data-index="2">
+  <div class="step-indicator"><span class="current">Étape 2</span> / 7 — L'exemple concret</div>
+  <h2 class="screen-title">🎬 Un scénario réel : accueillir un client</h2>
+  <p class="screen-subtitle">Suivons Marie, commerciale chez TechBel SA à Mons...</p>
+
+  <div class="scene-container">
+    <div class="scene-header">🎬 Clique sur « Lancer » pour voir l'animation</div>
+    <div class="scene-body">
+      <div class="stage" id="stage1">
+        <!-- Buildings -->
+        <div class="building" style="left: 5%; bottom: 50px;">🏢<div class="building-label">TechBel SA</div></div>
+        <div class="building" style="left: 40%; bottom: 50px;">✈️<div class="building-label">Aéroport</div></div>
+        <div class="building" style="left: 70%; bottom: 50px;">🍽️<div class="building-label">Restaurant</div></div>
+        <!-- Characters -->
+        <div class="char" id="s1-marie" style="left: 8%; bottom: 56px;">🙋‍♀️<div class="char-label">Marie</div></div>
+        <div class="char hidden" id="s1-client" style="left: 43%; bottom: 56px;">🧑‍💼<div class="char-label">M. Dupont</div></div>
+        <!-- Road -->
+        <div class="stage-road"></div>
+      </div>
+
+      <div id="s1-narration" class="explain-card" style="min-height: 80px;">
+        <p>👋 Voici <strong>Marie</strong>, commerciale chez TechBel SA. Son patron lui demande d'aller accueillir un client important, M. Dupont, à l'aéroport de Bruxelles et de l'inviter au restaurant.</p>
+      </div>
+
+      <div style="text-align: center;">
+        <button class="btn btn-primary" id="s1-play" onclick="playScene1()">▶️ Lancer la scène</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" onclick="goToStep(1)">← Retour</button>
+    <button class="btn btn-primary hidden" id="s1-next" onclick="goToStep(3)">Découvrir le forfait →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════ SCREEN 3 : LE FORFAIT ═══════════════════ -->
+<section class="screen" data-index="3">
+  <div class="step-indicator"><span class="current">Étape 3</span> / 7 — Le principe du forfait</div>
+  <h2 class="screen-title">📋 Le remboursement forfaitaire</h2>
+  <p class="screen-subtitle">Plus besoin de ticket pour chaque café !</p>
+
+  <div class="scene-container">
+    <div class="scene-header">💡 Choisis un profil pour voir le forfait applicable</div>
+    <div class="scene-body">
+      <div class="explain-card">
+        <h3>🏛️ Que dit le fisc belge ?</h3>
+        <p>Pour certaines fonctions, le SPF Finances accepte que l'employeur verse un <strong>montant forfaitaire mensuel</strong> pour couvrir les frais de représentation, <strong>sans devoir justifier chaque dépense individuellement</strong>. Il faut toutefois que la nature de la fonction justifie réellement ces dépenses (déplacements clients, repas d'affaires, etc.).</p>
+      </div>
+
+      <p style="text-align: center; margin: 16px 0; color: var(--text-dim); font-size: 0.9rem;">👇 Clique sur un profil pour voir les montants acceptés :</p>
+
+      <div class="profile-cards">
+        <div class="profile-card" onclick="selectProfile(this, 'commercial')">
+          <div class="emoji">🧳</div>
+          <div class="name">Commercial(e)</div>
+          <div class="role">Visites clients, salons</div>
+          <div class="amount" id="amt-commercial"></div>
+        </div>
+        <div class="profile-card" onclick="selectProfile(this, 'manager')">
+          <div class="emoji">👔</div>
+          <div class="name">Manager</div>
+          <div class="role">Réunions, networking</div>
+          <div class="amount" id="amt-manager"></div>
+        </div>
+        <div class="profile-card" onclick="selectProfile(this, 'dirigeant')">
+          <div class="emoji">🏆</div>
+          <div class="name">Dirigeant</div>
+          <div class="role">Représentation globale</div>
+          <div class="amount" id="amt-dirigeant"></div>
+        </div>
+      </div>
+
+      <div id="profile-explain" class="explain-card green hidden">
+        <h3 id="profile-explain-title"></h3>
+        <p id="profile-explain-text"></p>
+      </div>
+
+      <div class="explain-card orange" style="margin-top: 12px;">
+        <h3>⚠️ Attention, condition essentielle !</h3>
+        <p>Le fisc exige que la fonction implique <strong>réellement</strong> des frais de représentation réguliers. Il ne suffit pas d'attribuer un forfait sans justification : la nature du poste doit le justifier. L'employeur doit pouvoir démontrer que le travailleur engage effectivement ce type de dépenses.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" onclick="goToStep(2)">← Retour</button>
+    <button class="btn btn-primary" onclick="goToStep(4)">Voir le forfait en action →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════ SCREEN 4 : FORFAIT EN ACTION ═══════════════════ -->
+<section class="screen" data-index="4">
+  <div class="step-indicator"><span class="current">Étape 4</span> / 7 — Le forfait en pratique</div>
+  <h2 class="screen-title">🎬 Même scénario, mais avec le forfait !</h2>
+  <p class="screen-subtitle">Marie bénéficie maintenant d'un forfait mensuel...</p>
+
+  <div class="scene-container">
+    <div class="scene-header">🎬 Voyons la différence quand Marie a un forfait</div>
+    <div class="scene-body">
+      <div class="stage" id="stage2">
+        <div class="building" style="left: 5%; bottom: 50px;">🏢<div class="building-label">TechBel SA</div></div>
+        <div class="building" style="left: 40%; bottom: 50px;">✈️<div class="building-label">Aéroport</div></div>
+        <div class="building" style="left: 70%; bottom: 50px;">🍽️<div class="building-label">Restaurant</div></div>
+        <div class="char" id="s2-marie" style="left: 8%; bottom: 56px;">🙋‍♀️<div class="char-label">Marie</div></div>
+        <div class="char hidden" id="s2-client" style="left: 43%; bottom: 56px;">🧑‍💼<div class="char-label">M. Dupont</div></div>
+        <div class="stage-road"></div>
+      </div>
+
+      <div id="s2-narration" class="explain-card" style="min-height: 80px;">
+        <p>Même mission ! Mais cette fois, Marie reçoit un <strong>forfait mensuel de 125 €</strong> pour ses frais de représentation. Voyons ce qui change...</p>
+      </div>
+
+      <div style="text-align: center;">
+        <button class="btn btn-warm" id="s2-play" onclick="playScene2()">▶️ Lancer la scène avec forfait</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" onclick="goToStep(3)">← Retour</button>
+    <button class="btn btn-primary hidden" id="s2-next" onclick="goToStep(5)">Comparer les deux méthodes →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════ SCREEN 5 : COMPARISON ═══════════════════ -->
+<section class="screen" data-index="5">
+  <div class="step-indicator"><span class="current">Étape 5</span> / 7 — Comparaison interactive</div>
+  <h2 class="screen-title">⚖️ Remboursement réel vs. Forfait</h2>
+  <p class="screen-subtitle">Utilise le curseur pour simuler les dépenses de Marie !</p>
+
+  <div class="scene-container">
+    <div class="scene-header">🎮 Simulation interactive</div>
+    <div class="scene-body">
+      <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 12px;">Marie a un forfait mensuel de <strong>125 €</strong>. Fais varier le montant qu'elle dépense réellement ce mois-ci :</p>
+
+      <div class="slider-container">
+        <p style="font-size: 0.85rem; color: var(--text-dim);">Dépenses réelles de Marie ce mois :</p>
+        <input type="range" id="expense-slider" min="0" max="300" value="85" oninput="updateComparison()">
+        <div class="slider-value" id="expense-value">85 €</div>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-col" id="col-reel">
+          <h3>🧾 Remboursement réel</h3>
+          <div class="compare-row"><span class="label">Dépenses Marie</span><span class="value negative" id="cmp-real-dep">-85 €</span></div>
+          <div class="compare-row"><span class="label">Remboursé par patron</span><span class="value positive" id="cmp-real-reimb">+85 €</span></div>
+          <div class="compare-row"><span class="label">Bilan pour Marie</span><span class="value" id="cmp-real-bilan">0 €</span></div>
+          <div class="compare-row"><span class="label">Justificatifs nécessaires</span><span class="value negative">Oui, tous</span></div>
+        </div>
+        <div class="compare-col" id="col-forfait">
+          <h3>📋 Forfait (125 €/mois)</h3>
+          <div class="compare-row"><span class="label">Dépenses Marie</span><span class="value negative" id="cmp-forf-dep">-85 €</span></div>
+          <div class="compare-row"><span class="label">Forfait reçu</span><span class="value positive">+125 €</span></div>
+          <div class="compare-row"><span class="label">Bilan pour Marie</span><span class="value positive" id="cmp-forf-bilan">+40 €</span></div>
+          <div class="compare-row"><span class="label">Justificatifs nécessaires</span><span class="value positive">Non (forfait)</span></div>
+        </div>
+      </div>
+
+      <div id="compare-comment" class="explain-card green">
+        <h3>💡 Observation</h3>
+        <p id="compare-text">Ce mois-ci, Marie dépense 85 € mais reçoit 125 € de forfait. Elle est gagnante de 40 € ! Et pas de paperasse pour justifier chaque ticket.</p>
+      </div>
+
+      <div class="explain-card orange" style="margin-top: 8px;">
+        <h3>📌 Et si les dépenses sont très élevées ?</h3>
+        <p>Si un mois donné, Marie doit engager des frais <strong>exceptionnellement élevés</strong> (ex : un grand événement à 500 €), elle peut demander un remboursement complémentaire <strong>en plus du forfait</strong>, à condition de fournir les justificatifs pour la partie qui dépasse.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" onclick="goToStep(4)">← Retour</button>
+    <button class="btn btn-primary" onclick="goToStep(6)">Impact sur le salaire →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════ SCREEN 6 : SALAIRE NET ═══════════════════ -->
+<section class="screen" data-index="6">
+  <div class="step-indicator"><span class="current">Étape 6</span> / 7 — L'avantage fiscal</div>
+  <h2 class="screen-title">💰 L'impact sur le salaire net</h2>
+  <p class="screen-subtitle">Le vrai bonus : ce forfait n'est pas imposé !</p>
+
+  <div class="scene-container">
+    <div class="scene-header">📊 Simulation salariale interactive</div>
+    <div class="scene-body">
+      <div class="explain-card">
+        <h3>🔑 Le point clé</h3>
+        <p>Les frais de représentation forfaitaires sont considérés comme un <strong>remboursement de frais</strong> et non comme une rémunération. Ils ne sont donc <strong>ni imposés, ni soumis aux cotisations sociales</strong> (ONSS). Résultat : le travailleur reçoit ce montant <strong>net dans sa poche</strong>.</p>
+      </div>
+
+      <p style="text-align: center; margin: 16px 0; font-size: 0.9rem; color: var(--text-dim);">Comparons : 125 € en plus de salaire brut vs. 125 € en forfait de représentation</p>
+
+      <div class="salary-bar-container">
+        <div class="salary-bar-wrapper">
+          <div class="salary-bar-value" style="color: var(--red);" id="bar1-val">≈ 62 €</div>
+          <div class="salary-bar" style="height: 100px;">
+            <div class="segment" style="height: 50%; background: var(--red); border-radius: 10px 10px 0 0;" title="Impôts + ONSS"></div>
+            <div class="segment" style="height: 50%; background: var(--accent3);" title="Net perçu"></div>
+          </div>
+          <div class="salary-bar-label">+125 € brut<br><small>(salaire classique)</small></div>
+        </div>
+
+        <div style="font-size: 2rem; align-self: center; color: var(--text-dim);">vs</div>
+
+        <div class="salary-bar-wrapper">
+          <div class="salary-bar-value" style="color: var(--accent3);" id="bar2-val">125 €</div>
+          <div class="salary-bar" style="height: 180px;">
+            <div class="segment" style="height: 100%; background: var(--accent3); border-radius: 10px 10px 0 0;" title="Net perçu (100%)"></div>
+          </div>
+          <div class="salary-bar-label">+125 € forfait<br><small>(frais de représentation)</small></div>
+        </div>
+      </div>
+
+      <div class="ticker">
+        🎯 Le forfait = <strong>125 € net</strong> dans la poche &nbsp;|&nbsp; Le même montant en brut = seulement <strong>≈ 62 € net</strong>
+      </div>
+
+      <div class="explain-card green" style="margin-top: 12px;">
+        <h3>📐 Pourquoi cette différence ?</h3>
+        <p>Un salaire brut de 125 € est amputé d'environ <strong>13,07 % de cotisations ONSS</strong> (part travailleur), puis du <strong>précompte professionnel</strong> (qui peut atteindre 50 % pour les tranches élevées). Au final, il ne reste qu'environ <strong>50 %</strong> en net. Le forfait, lui, arrive <strong>intégralement</strong> dans la poche du travailleur !</p>
+      </div>
+
+      <div class="explain-card orange" style="margin-top: 8px;">
+        <h3>🏢 Et pour l'employeur ?</h3>
+        <p>C'est gagnant aussi ! L'employeur n'a pas à payer de <strong>cotisations patronales</strong> (≈ 25 %) sur ce montant. Un forfait de 125 € coûte exactement 125 € à l'employeur, alors qu'un salaire brut de 125 € lui coûte environ <strong>156 €</strong> (avec charges patronales).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" onclick="goToStep(5)">← Retour</button>
+    <button class="btn btn-success" onclick="goToStep(7)">Conclusion 🎓 →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════ SCREEN 7 : CONCLUSION ═══════════════════ -->
+<section class="screen" data-index="7">
+  <div class="step-indicator"><span class="current">Étape 7</span> / 7 — Conclusion</div>
+  <h2 class="screen-title">🎓 Ce qu'il faut retenir</h2>
+  <p class="screen-subtitle">Tu es prêt(e) à briller en fiscalité belge !</p>
+
+  <div class="scene-container">
+    <div class="scene-header">📝 Résumé interactif — clique pour révéler chaque point</div>
+    <div class="scene-body">
+      <div id="summary-items">
+        <div class="summary-item" onclick="revealSummary(this)">
+          <div class="summary-header">
+            <span>1️⃣</span>
+            <span class="summary-q">Qu'est-ce que les frais de représentation ?</span>
+            <span class="summary-arrow">▶</span>
+          </div>
+          <div class="summary-answer hidden">
+            Ce sont des dépenses engagées par le travailleur dans l'intérêt de l'entreprise (repas clients, déplacements, cadeaux d'affaires...) que l'employeur rembourse.
+          </div>
+        </div>
+        <div class="summary-item" onclick="revealSummary(this)">
+          <div class="summary-header">
+            <span>2️⃣</span>
+            <span class="summary-q">Quelle est la différence entre remboursement réel et forfaitaire ?</span>
+            <span class="summary-arrow">▶</span>
+          </div>
+          <div class="summary-answer hidden">
+            Le remboursement réel exige un justificatif pour chaque dépense. Le forfait est un montant fixe mensuel accepté par le fisc, sans justification détaillée de chaque dépense, mais la nature du poste doit le justifier.
+          </div>
+        </div>
+        <div class="summary-item" onclick="revealSummary(this)">
+          <div class="summary-header">
+            <span>3️⃣</span>
+            <span class="summary-q">Pourquoi le travailleur est-il gagnant avec le forfait ?</span>
+            <span class="summary-arrow">▶</span>
+          </div>
+          <div class="summary-answer hidden">
+            Si ses dépenses réelles sont inférieures au forfait, il garde la différence. Et si elles sont supérieures exceptionnellement, il peut demander un remboursement complémentaire.
+          </div>
+        </div>
+        <div class="summary-item" onclick="revealSummary(this)">
+          <div class="summary-header">
+            <span>4️⃣</span>
+            <span class="summary-q">Quel est l'impact sur le salaire net ?</span>
+            <span class="summary-arrow">▶</span>
+          </div>
+          <div class="summary-answer hidden">
+            Le forfait n'est ni imposé, ni soumis aux cotisations sociales. 125 € de forfait = 125 € net. Le même montant en salaire brut ne donnerait qu'environ 62 € net. C'est avantageux autant pour le travailleur que pour l'employeur !
+          </div>
+        </div>
+        <div class="summary-item" onclick="revealSummary(this)">
+          <div class="summary-header">
+            <span>5️⃣</span>
+            <span class="summary-q">Quelles sont les conditions ?</span>
+            <span class="summary-arrow">▶</span>
+          </div>
+          <div class="summary-answer hidden">
+            La fonction doit réellement impliquer des frais de représentation (commerciaux, managers, dirigeants...). Les montants doivent respecter les plafonds acceptés par le fisc. L'employeur doit pouvoir justifier la politique de remboursement forfaitaire.
+          </div>
+        </div>
+      </div>
+
+      <div id="all-revealed" class="hidden" style="text-align: center; margin-top: 20px;">
+        <div class="ticker" style="font-size: 1.3rem;">
+          🏆 Bravo ! Tu maîtrises les frais de représentation forfaitaires !
+        </div>
+        <div id="confetti-zone" style="position: relative; height: 60px; overflow: hidden; margin-top: 10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" onclick="goToStep(6)">← Retour</button>
+    <button class="btn btn-primary" onclick="goToStep(0)">🔄 Recommencer</button>
+  </div>
+</section>
+
+<style>
+.summary-item {
+  background: var(--card); border-radius: 12px;
+  margin-bottom: 10px; overflow: hidden;
+  cursor: pointer; transition: all 0.3s;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.summary-item:hover { border-color: var(--accent); }
+.summary-item.revealed { border-color: var(--accent3); }
+.summary-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 18px; font-weight: 500;
+}
+.summary-q { flex: 1; font-size: 0.95rem; }
+.summary-arrow { transition: transform 0.3s; font-size: 0.8rem; color: var(--text-dim); }
+.summary-item.revealed .summary-arrow { transform: rotate(90deg); color: var(--accent3); }
+.summary-answer {
+  padding: 0 18px 16px 44px; font-size: 0.9rem;
+  color: var(--text-dim); line-height: 1.7;
+  animation: slideUp 0.3s ease;
+}
+</style>
+
+<script>
+// ─── STATE ───
+let currentStep = 0;
+const totalSteps = 8;
+let scene1Phase = 0;
+let scene2Phase = 0;
+let revealedCount = 0;
+
+// ─── NAVIGATION ───
+function goToStep(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen')[n].classList.add('active');
+  currentStep = n;
+  updateNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateNav() {
+  const dots = document.querySelectorAll('.step-dot');
+  dots.forEach((d, i) => {
+    d.classList.remove('active', 'done');
+    if (i === currentStep) d.classList.add('active');
+    else if (i < currentStep) d.classList.add('done');
+  });
+  document.getElementById('progress-bar').style.width = ((currentStep / (totalSteps - 1)) * 100) + '%';
+}
+
+document.querySelectorAll('.step-dot').forEach(d => {
+  d.addEventListener('click', () => goToStep(parseInt(d.dataset.step)));
+});
+
+// ─── DRAG & DROP (Screen 1) ───
+let dragOrder = [];
+const dragItems = document.querySelectorAll('.drag-item');
+const dropZone = document.getElementById('drop-sentence');
+
+dragItems.forEach(item => {
+  item.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('text/plain', item.dataset.order);
+    e.dataTransfer.setData('text/html', item.outerHTML);
+    setTimeout(() => item.classList.add('placed'), 0);
+  });
+});
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('over');
+  const order = parseInt(e.dataTransfer.getData('text/plain'));
+  if (dragOrder.length === 0) dropZone.innerHTML = '';
+  dragOrder.push(order);
+
+  const clone = document.createElement('span');
+  clone.className = 'drag-item';
+  clone.style.cursor = 'default';
+  clone.textContent = [...dragItems].find(d => parseInt(d.dataset.order) === order).textContent;
+  dropZone.appendChild(clone);
+
+  if (dragOrder.length === 4) {
+    const correct = dragOrder.every((v, i) => v === i + 1);
+    if (correct) {
+      dropZone.classList.add('correct');
+      document.getElementById('def-result').classList.remove('hidden');
+    } else {
+      dropZone.innerHTML = '<span style="color: var(--red);">❌ Pas dans le bon ordre ! Rafraîchis pour réessayer.</span>';
+      setTimeout(() => {
+        dropZone.innerHTML = '<span style="color: var(--text-dim);">👆 Dépose les éléments ici dans le bon ordre...</span>';
+        dropZone.classList.remove('correct');
+        dragItems.forEach(d => d.classList.remove('placed'));
+        dragOrder = [];
+      }, 2000);
+    }
+  }
+});
+
+// ─── SCENE 1 : REMBOURSEMENT REEL ───
+async function playScene1() {
+  const btn = document.getElementById('s1-play');
+  btn.disabled = true; btn.textContent = '⏳ En cours...';
+  const marie = document.getElementById('s1-marie');
+  const client = document.getElementById('s1-client');
+  const narr = document.getElementById('s1-narration');
+  const stage = document.getElementById('stage1');
+
+  // Phase 1: Marie goes to airport
+  narr.innerHTML = '<p>🚗 Marie prend sa voiture et se rend à l\'aéroport de Bruxelles pour accueillir M. Dupont...</p>';
+  marie.style.left = '38%';
+  await wait(1200);
+
+  // Phase 2: Client appears
+  client.classList.remove('hidden');
+  client.style.animation = 'flyIn 0.8s ease forwards';
+  narr.innerHTML = '<p>✈️ L\'avion de M. Dupont vient d\'atterrir ! Marie l\'accueille chaleureusement.</p>';
+  await wait(1500);
+
+  // Phase 3: Go to restaurant
+  narr.innerHTML = '<p>🍽️ Marie invite M. Dupont au restaurant. Elle paie l\'addition de <strong>85 €</strong> avec sa propre carte bancaire.</p>';
+  marie.style.left = '65%';
+  client.style.left = '73%';
+  await wait(1500);
+
+  // Show receipt
+  showThought(stage, '68%', '55%', '🧾 Addition : 85 €');
+  spawnMoney(stage, '68%', '50%', '💸');
+  await wait(2000);
+
+  // Phase 4: Return to office
+  narr.innerHTML = '<p>🏢 De retour à l\'entreprise, Marie remet ses justificatifs (ticket de restaurant, ticket de parking) à son patron.</p>';
+  marie.style.left = '8%';
+  client.style.left = '15%';
+  await wait(1500);
+
+  // Phase 5: Reimbursement
+  narr.innerHTML = '<p>💰 Le patron vérifie les justificatifs et <strong>rembourse Marie de 85 €</strong>. Marie récupère exactement ce qu\'elle a dépensé. Bilan : <strong>0 € de sa poche</strong>.</p>';
+  showThought(stage, '10%', '20%', '✅ Remboursée : +85 €');
+  spawnMoney(stage, '5%', '40%', '💵');
+  spawnMoney(stage, '12%', '35%', '💵');
+  await wait(1000);
+
+  // Show summary
+  const summary = document.createElement('div');
+  summary.className = 'explain-card green';
+  summary.style.animation = 'slideUp 0.5s ease';
+  summary.innerHTML = `<h3>📊 Bilan du remboursement réel</h3>
+    <p>Marie a dépensé <strong>85 €</strong> → Son patron lui a remboursé <strong>85 €</strong> sur base des justificatifs.<br>
+    ✅ Résultat net pour Marie : <strong>0 €</strong> (ni gain, ni perte)<br>
+    📝 Contrainte : elle a dû garder <strong>tous les tickets</strong> et remplir une note de frais.</p>`;
+  narr.parentElement.insertBefore(summary, narr.nextSibling);
+
+  btn.classList.add('hidden');
+  document.getElementById('s1-next').classList.remove('hidden');
+}
+
+// ─── SCENE 2 : FORFAIT ───
+async function playScene2() {
+  const btn = document.getElementById('s2-play');
+  btn.disabled = true; btn.textContent = '⏳ En cours...';
+  const marie = document.getElementById('s2-marie');
+  const client = document.getElementById('s2-client');
+  const narr = document.getElementById('s2-narration');
+  const stage = document.getElementById('stage2');
+
+  // Show forfait badge
+  showThought(stage, '5%', '10%', '📋 Forfait : 125 €/mois');
+  await wait(1000);
+
+  // Phase 1: same trip
+  narr.innerHTML = '<p>🚗 Même mission ! Marie va à l\'aéroport chercher M. Dupont...</p>';
+  marie.style.left = '38%';
+  await wait(1200);
+
+  client.classList.remove('hidden');
+  client.style.animation = 'flyIn 0.8s ease forwards';
+  narr.innerHTML = '<p>✈️ M. Dupont arrive. Marie l\'accueille et l\'emmène au restaurant.</p>';
+  await wait(1200);
+
+  // Restaurant
+  marie.style.left = '65%';
+  client.style.left = '73%';
+  narr.innerHTML = '<p>🍽️ Même restaurant, même addition de <strong>85 €</strong>. Marie paie de sa poche comme avant.</p>';
+  await wait(1200);
+
+  showThought(stage, '68%', '55%', '🧾 85 €');
+  spawnMoney(stage, '68%', '50%', '💸');
+  await wait(1500);
+
+  // Return
+  marie.style.left = '8%';
+  client.style.left = '15%';
+  narr.innerHTML = '<p>🏢 Retour au bureau. Mais cette fois, Marie n\'a <strong>pas besoin de remettre ses tickets</strong> pour ce montant ! Son forfait mensuel de 125 € couvre ces dépenses.</p>';
+  await wait(2000);
+
+  // Forfait calculation
+  narr.innerHTML = '<p>🧮 Faisons le calcul :<br>• Forfait reçu : <strong>+125 €</strong><br>• Dépensé ce mois : <strong>-85 €</strong><br>• <strong style="color: var(--accent3);">Marie garde 40 € dans sa poche !</strong></p>';
+  showThought(stage, '10%', '15%', '🤑 +40 € de bonus !');
+  spawnMoney(stage, '8%', '35%', '💵');
+  spawnMoney(stage, '15%', '30%', '💵');
+  spawnMoney(stage, '12%', '25%', '💵');
+  await wait(2000);
+
+  // Summary
+  const summary = document.createElement('div');
+  summary.className = 'explain-card green';
+  summary.style.animation = 'slideUp 0.5s ease';
+  summary.innerHTML = `<h3>📊 Bilan avec le forfait</h3>
+    <p>Marie reçoit un forfait de <strong>125 €/mois</strong>. Ce mois-ci, elle n'a dépensé que <strong>85 €</strong>.<br>
+    ✅ Résultat net pour Marie : <strong>+40 € dans sa poche !</strong><br>
+    📝 Pas de paperasse, pas de notes de frais pour ces 85 €.<br>
+    ⚠️ Si un autre mois elle dépense 250 €, elle pourra demander un remboursement complémentaire (250 - 125 = 125 € à justifier).</p>`;
+  narr.parentElement.insertBefore(summary, narr.nextSibling);
+
+  btn.classList.add('hidden');
+  document.getElementById('s2-next').classList.remove('hidden');
+}
+
+// ─── COMPARISON SLIDER ───
+function updateComparison() {
+  const val = parseInt(document.getElementById('expense-slider').value);
+  document.getElementById('expense-value').textContent = val + ' €';
+  document.getElementById('cmp-real-dep').textContent = '-' + val + ' €';
+  document.getElementById('cmp-real-reimb').textContent = '+' + val + ' €';
+  document.getElementById('cmp-real-bilan').textContent = '0 €';
+  document.getElementById('cmp-real-bilan').className = 'value';
+  document.getElementById('cmp-forf-dep').textContent = '-' + val + ' €';
+
+  const forfait = 125;
+  const bilan = forfait - val;
+
+  document.getElementById('cmp-forf-bilan').textContent = (bilan >= 0 ? '+' : '') + bilan + ' €';
+  document.getElementById('cmp-forf-bilan').className = 'value ' + (bilan >= 0 ? 'positive' : 'negative');
+
+  const colForfait = document.getElementById('col-forfait');
+  const colReel = document.getElementById('col-reel');
+  colForfait.classList.toggle('highlight', bilan > 0);
+  colReel.classList.toggle('highlight', bilan <= 0);
+
+  const txt = document.getElementById('compare-text');
+  const card = document.getElementById('compare-comment');
+
+  if (val === 0) {
+    card.className = 'explain-card green';
+    txt.textContent = `Marie ne dépense rien ce mois-ci, mais elle garde 125 € de forfait. C'est tout bénéfice !`;
+  } else if (val < forfait) {
+    card.className = 'explain-card green';
+    txt.textContent = `Marie dépense ${val} € et reçoit 125 € de forfait. Elle est gagnante de ${bilan} € ! Avec le remboursement réel, elle serait à 0 €.`;
+  } else if (val === forfait) {
+    card.className = 'explain-card';
+    txt.textContent = `Marie dépense exactement le montant du forfait (125 €). Les deux méthodes sont équivalentes ce mois-ci, mais le forfait reste plus simple (pas de justificatifs).`;
+  } else if (val <= 200) {
+    card.className = 'explain-card orange';
+    txt.textContent = `Marie dépense ${val} € mais ne reçoit que 125 € de forfait. Elle perd ${-bilan} € ce mois-ci. Globalement sur l'année, le forfait reste souvent avantageux.`;
+  } else {
+    card.className = 'explain-card pink';
+    txt.textContent = `Dépense exceptionnelle de ${val} € ! Marie perd ${-bilan} € ce mois-ci. Dans ce cas, elle peut demander un remboursement complémentaire de ${val - forfait} € à son patron, en justifiant la dépense exceptionnelle.`;
+  }
+}
+
+// ─── PROFILES ───
+function selectProfile(el, type) {
+  document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+
+  const profiles = {
+    commercial: {
+      title: '🧳 Profil commercial(e)',
+      text: `Un(e) commercial(e) est régulièrement sur la route : visites clients, salons professionnels, repas d'affaires. Le fisc accepte un forfait pouvant aller jusqu'à environ <strong>125 €/mois</strong> (ce montant varie selon les ruling et les conventions sectorielles). Ce montant couvre les petites dépenses courantes sans justificatif individuel.`
+    },
+    manager: {
+      title: '👔 Profil manager',
+      text: `Un(e) manager participe à des réunions externes, du networking, des événements professionnels. Le forfait peut être similaire ou légèrement supérieur à celui d'un commercial, selon l'ampleur des responsabilités de représentation. Les montants acceptés oscillent généralement entre <strong>75 € et 150 €/mois</strong>.`
+    },
+    dirigeant: {
+      title: '🏆 Profil dirigeant(e)',
+      text: `Un(e) dirigeant(e) d'entreprise a un rôle de représentation permanent : événements, réceptions, relations institutionnelles. Le fisc peut accepter des forfaits plus élevés, mais toujours proportionnels à la taille et l'activité de l'entreprise. Les montants peuvent atteindre <strong>150 € à 250 €/mois</strong> selon les cas.`
+    }
+  };
+
+  const p = profiles[type];
+  const explainDiv = document.getElementById('profile-explain');
+  explainDiv.classList.remove('hidden');
+  document.getElementById('profile-explain-title').textContent = p.title;
+  document.getElementById('profile-explain-text').innerHTML = p.text;
+}
+
+// ─── SUMMARY REVEAL ───
+function revealSummary(el) {
+  if (!el.classList.contains('revealed')) {
+    el.classList.add('revealed');
+    el.querySelector('.summary-answer').classList.remove('hidden');
+    revealedCount++;
+    if (revealedCount >= 5) {
+      document.getElementById('all-revealed').classList.remove('hidden');
+      launchConfetti();
+    }
+  }
+}
+
+// ─── HELPERS ───
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function showThought(stage, left, bottom, text) {
+  const b = document.createElement('div');
+  b.className = 'thought-bubble';
+  b.style.left = left;
+  b.style.bottom = bottom;
+  b.textContent = text;
+  stage.appendChild(b);
+  setTimeout(() => b.remove(), 3000);
+}
+
+function spawnMoney(stage, left, bottom, emoji) {
+  const m = document.createElement('div');
+  m.className = 'money-anim';
+  m.style.left = left;
+  m.style.bottom = bottom;
+  m.textContent = emoji;
+  stage.appendChild(m);
+  setTimeout(() => m.remove(), 1500);
+}
+
+function launchConfetti() {
+  const zone = document.getElementById('confetti-zone');
+  const emojis = ['🎉', '🎊', '⭐', '🏆', '💰', '📊', '🎓'];
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const c = document.createElement('span');
+      c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      c.style.cssText = `position:absolute; top:0; left:${Math.random()*90}%; font-size:${1+Math.random()}rem; animation: confetti ${1+Math.random()*2}s ease forwards;`;
+      zone.appendChild(c);
+      setTimeout(() => c.remove(), 3000);
+    }, i * 100);
+  }
+}
+
+// Init comparison
+updateComparison();
+</script>
+
+</body>
+</html>
